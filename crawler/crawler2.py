@@ -17,6 +17,7 @@ def get_text(url):
     # 获取小说内容
     text = selector.find("div", id="content").text
 
+    # 解决文件名带有转义字符导致在Windows系统下出现问题
     intab = "?*/\|.:><"
     outab = "         "
     trantab = str.maketrans(intab, outab)
