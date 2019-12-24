@@ -1,0 +1,16 @@
+
+for i in [1, 2, 3]:
+    print(i)
+
+names = ("张三", "李四", "王二麻", '赵六')
+ages = (18, 20, 33, 44)
+jobs = ('老师', '警察', '公务员')
+
+for name, age, job in zip(names, ages, jobs):
+    print("{0}-----{1}-----{2}".format(name, age, job))
+
+
+str3 = "I Love Python, you Love Me"
+
+char_count = {c: str3.count(c) for c in str3}
+print(char_count)
