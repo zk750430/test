@@ -10,6 +10,7 @@ import scrapy
 
 class YangguangItem(scrapy.Item):
     title = scrapy.Field()
-    publish_data = scrapy.Field()
-    publish_name = scrapy.Field()
-    publish_state = scrapy.Field()
+    href = scrapy.Field()
+    publish_date = scrapy.Field()
+    content = scrapy.Field()
+    content_img = scrapy.Field()
