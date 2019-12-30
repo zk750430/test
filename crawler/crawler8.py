@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import redis
 
 #
 # url = 'https://hz-bj-rubbish.neocross.cn/rubbish/V1/app/transform/findByType'
@@ -63,6 +64,14 @@ json4 = {
     "type_id": "33"
 }
 
-res = requests.post(url, headers=headers, json=json4, verify=False)
+res = requests.post(url, headers=headers, json=json1, verify=False)
 res.encoding = res.apparent_encoding
-print(json.loads(res.text)['data'['list']])
+text_list = json.loads(res.text)['data']['list']
+list = []
+for text in text_list:
+    name = text['example']
+    list.append(name)
+print(list)
+r = redis.Redis(host='localhost', port=6379, password='123456',
+                decode_responses=True)  # host是redis主机，需要redis服务端和客户端都启动 redis默认端口是6379
+r.rpush("可回收物", ','.join(list))
