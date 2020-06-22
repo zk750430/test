@@ -3,13 +3,12 @@ import ast
 from prettytable import PrettyTable
 from colorama import Fore
 from apscheduler.schedulers.blocking import BlockingScheduler
-
-
+import time
 
 
 def lottery():
     # url地址通过抓包工具Charles获取
-    url = 'http://d.10jqka.com.cn/multimarketreal/17,33/601360_600418_600598_600036_600030_600029_600814,000800_002142_002594_000425_000100_' \
+    url = 'http://d.10jqka.com.cn/multimarketreal/17,33/601360_600814_600418_600598_600036_600030_002241_600029,000800_002142_002594_000425_000100_' \
           '000725_000063/1968584_13_19_3541450_526792_6_7_8_9_10_2034120_199112_264648?callback=multimarketreal&_=1591925863750'
     # 设置headers，特别是User-Agent和Cookie
     headers = {
@@ -44,12 +43,12 @@ def lottery():
             if json_object[item][item1]['264648'] > '0':
                 price = '\n'.join([Fore.RED + json_object[item][item1]['10'] + Fore.RESET])
                 up_and_down_range = '\n'.join(
-                    [Fore.RED + json_object[item][item1]['264648'] + "(" + json_object[item][item1][
-                        '199112'] + "%)" + Fore.RESET])
+                    [Fore.RED + json_object[item][item1]['199112'] + "%(" + json_object[item][item1][
+                        '264648'] + ")" + Fore.RESET])
             else:
                 price = '\n'.join([Fore.BLUE + json_object[item][item1]['10'] + Fore.RESET])
-                up_and_down_range = '\n'.join([Fore.BLUE + json_object[item][item1]['264648'] + "(" +
-                                            json_object[item][item1]['199112'] + "%)" + Fore.RESET])
+                up_and_down_range = '\n'.join([Fore.BLUE + json_object[item][item1]['199112'] + "%(" +
+                                               json_object[item][item1]['264648'] + ")" + Fore.RESET])
             pt.add_row([
                 # 股票名
                 json_object[item][item1]['name'] + "(" + item1 + ")",
@@ -71,12 +70,15 @@ def lottery():
     print(pt)
 
 
-# scheduler = BlockingScheduler()
+scheduler = BlockingScheduler()
 # 定时任务，5秒一次
-# scheduler.add_job(func=lottery, trigger='cron', second='*/5')
-# scheduler.start()
-if __name__ == "__main__":
-    lottery()
+scheduler.add_job(id='shares', func=lottery, trigger='cron', hour='9-11,13-15', second='*/3')
+time_hour = time.strftime('%H:%M', time.localtime())
 
+if '15:00' <= time_hour:
+    scheduler.shutdown()
+else:
+    scheduler.start()
 
-
+# if __name__ == "__main__":
+#     lottery()
