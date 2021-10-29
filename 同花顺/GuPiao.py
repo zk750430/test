@@ -8,23 +8,22 @@ import time
 
 def lottery():
     # url地址通过抓包工具Charles获取
-    url = 'http://d.10jqka.com.cn/multimarketreal/17,33/601360_600814_600418_600598_600036_600030_002241_600029,000800_002142_002594_000425_000100_' \
-          '000725_000063/1968584_13_19_3541450_526792_6_7_8_9_10_2034120_199112_264648?callback=multimarketreal&_=1591925863750'
+    url = 'http://d.10jqka.com.cn/multimarketreal/17,33/600196_600418_600030_600036_600598_601990,002600_000063_000725_002142_000100_300603/' \
+          '1968584_13_19_3541450_526792_6_7_8_9_10_2034120_199112_264648?callback=multimarketreal&_=1607665572270'
     # 设置headers，特别是User-Agent和Cookie
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.97 Safari/537.36',
-        'Cookie': 'historystock=002204; spversion=20130314; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1589859089,1589939884,1591925740; __'
-                  'utma=156575163.511228193.1589859093.1589859093.1591925746.2; __utmc=156575163; __utmz=156575163.1591925746.2.2.utmcsr=download.10jqka.com.cn'
-                  '|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmb=156575163.1.10.1591925746; log=; user=MDpteF81MjMyMDU3OTg6Ok5vbmU6NTAwOjUzMzIwNTc5ODo3LD'
-                  'ExMTExMTExMTExLDQwOzQ0LDExLDQwOzYsMSw0MDs1LDEsNDA7MSwxMDEsNDA7MiwxLDQwOzMsMSw0MDs1LDEsNDA7OCwwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMSw0MDoxNjo6OjUyMz'
-                  'IwNTc5ODoxNTkxOTI1ODUxOjo6MTU4OTE3MjAwMDo0MDA5NDk6MDoxMjljMmRiMTRlMjMyMWFlMjg2ZTFmMmMxNTEyYWU2MjE6ZGVmYXVsdF80OjE%3D; userid=523205798; u_name='
-                  'mx_523205798; escapename=mx_523205798; ticket=c70d83f8d9120c5fd3cdd0bc738bdfbc; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1591925864; v=AjCUpLCqGt'
-                  'ExW8bVOjecqONPAfWBeREVNndo2iqB_IBfJ94j0onkU4ZtOJF5',
+        'Cookie': 'historystock=300033; spversion=20130314; user=MDpteF81MjMyMDU3OTg6Ok5vbmU6NTAwOjUzMzIwNTc5ODo3LDExMTExMTExMTExLDQwOzQ'
+                  '0LDExLDQwOzYsMSw0MDs1LDEsNDA7MSwxMDEsNDA7MiwxLDQwOzMsMSw0MDs1LDEsNDA7OCwwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMSw0MDsxMDIsMSw0M'
+                  'DoxNjo6OjUyMzIwNTc5ODoxNjA3NjU1ODMxOjo6MTU4OTE3MjAwMDo0MDI5Njk6MDoxYjZlMTU0MjNlY2ViNTE5ODNmMTk3ZTc5MGUwZmQ0MTk6ZGVmYXV'
+                  'sdF80OjE%3D; userid=523205798; u_name=mx_523205798; escapename=mx_523205798; ticket=d13375290cc17754a181f3e0ec6cbfc9; '
+                  'user_status=0; log=; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1607655799,1607656459; Hm_lpvt_78c58f01938'
+                  'e4d85eaf619eae71b4ed1=1607656459; v=AsWSdIa0NpbvgxJK0dAwMZcE1Ar8gnn3wzRdaMcqgfwLXut8j9KJ5FOGbQZU',
         'Accept': '*/*',
-        'Referer': 'http://t.10jqka.com.cn/newcircle/user/userPersonal/?from=finance&tab=zx',
+        'Host': 'd.10jqka.com.cn',
+        'Referer': 'http://t.10jqka.com.cn/',
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.9',
-        'Cookie': 'historystock=002204; spvers',
         'Connection': 'keep - alive'
     }
 
@@ -32,8 +31,8 @@ def lottery():
     res.encoding = res.apparent_encoding
     json_object = ast.literal_eval(res.text[16:len(res.text) - 1])
 
-    pt = PrettyTable()
-    pt._set_field_names(" 股票名　当前价格　涨跌幅度　振幅　换手率　成交额 昨收　今开".split())
+    pt = PrettyTable(" 股票名　当前价格　涨跌幅度　振幅　换手率　成交额 昨收　今开".split())
+    # pt.field_names()
 
     for item in json_object:
         for item1 in json_object[item]:
@@ -67,6 +66,8 @@ def lottery():
                 # 今开
                 json_object[item][item1]['7'],
             ])
+            pt.sortby = "涨跌幅度"
+            pt.reversesort = True
     print(pt)
 
 
@@ -79,6 +80,3 @@ if '15:00' <= time_hour:
     scheduler.shutdown()
 else:
     scheduler.start()
-
-# if __name__ == "__main__":
-#     lottery()
