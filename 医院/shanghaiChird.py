@@ -2,10 +2,13 @@ import requests
 import json
 from apscheduler.schedulers.blocking import BlockingScheduler
 import time
+import urllib3
+
 
 
 def lottery():
     # url地址通过抓包工具Charles获取
+    print("=================")
     url = 'https://wxsrv.scmc.com.cn/common/api?cmd=DoctorDetailApp&doctorid=4187&nowday=0&platform=m&clinname=%E5%84%BF%E4%BF%9D%E7%A7%91'
     # 设置headers，特别是User-Agent和Cookie
     headers = {
@@ -18,28 +21,26 @@ def lottery():
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
         'Connection': 'keep-alive'
     }
-    print(url)
     res = requests.get(url, headers=headers, verify=False)
     res.encoding = res.apparent_encoding
-    str1 = res.text[48:len(res.text) - 1]
+    str1 = res.text[4:len(res.text) - 1]
     list = json.loads(str1)["cliniclist"]
     for index, item in enumerate(list):
         list1 = item["list"]
         for item1 in list1:
             if item1["statustext"] != "约满" and item1["date"]<"2021-11-30":
+                print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
                 print(item["name"])
                 print("日期：" + item1["date"]+" "+item1["time"] + "，状态：" + item1["statustext"]+"，价钱："+item1["regfee"])
+    print("                 ")
 
+urllib3.disable_warnings()
 scheduler = BlockingScheduler()
 # 定时任务，5秒一次
-scheduler.add_job(id='shares', func=lottery, trigger='cron', hour='9-15', second='*/5')
+scheduler.add_job(id='shares', func=lottery, max_instances=10, trigger='cron', second='*/5')
 time_hour = time.strftime('%H:%M', time.localtime())
 
-
-if '15:00' <= time_hour:
-    scheduler.shutdown()
-else:
-    scheduler.start()
+scheduler.start()
 
 # if __name__ == "__main__":
 #     lottery()

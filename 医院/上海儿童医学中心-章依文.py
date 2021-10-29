@@ -1,4 +1,6 @@
 import requests
+import time
+
 
 def lottery():
     # url地址通过抓包工具Charles获取
@@ -21,4 +23,4 @@ def lottery():
 
 
 if __name__ == "__main__":
-    print("2021-10-29"<"2021-10-30")
+    print(time.strftime("%Y-%m-%d %H:%M:%S",time.localtime()))
