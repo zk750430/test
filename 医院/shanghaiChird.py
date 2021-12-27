@@ -35,12 +35,12 @@ def lottery():
     print("                 ")
 
 urllib3.disable_warnings()
-scheduler = BlockingScheduler()
-# 定时任务，5秒一次
-scheduler.add_job(id='shares', func=lottery, max_instances=10, trigger='cron', second='*/5')
-time_hour = time.strftime('%H:%M', time.localtime())
+# scheduler = BlockingScheduler()
+# # 定时任务，5秒一次
+# scheduler.add_job(id='shares', func=lottery, max_instances=10, trigger='cron', second='*/5')
+# time_hour = time.strftime('%H:%M', time.localtime())
+#
+# scheduler.start()
 
-scheduler.start()
-
-# if __name__ == "__main__":
-#     lottery()
+if __name__ == "__main__":
+    lottery()
