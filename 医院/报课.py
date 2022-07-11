@@ -54,8 +54,6 @@ def lottery():
                 print(data['spelName'])
 
 
-
-
 urllib3.disable_warnings()
 # scheduler = BlockingScheduler()
 # # 定时任务，5秒一次
